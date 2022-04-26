@@ -1,0 +1,5 @@
+Functions
+    - Can't be declared inside other functions (no nesting)
+
+One Definition Rule
+    -
