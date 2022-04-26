@@ -1,7 +1,8 @@
 
 
-Compile
-    Terminal -> Run Build Task
+# Compile
+    - vsCode
+        - Terminal -> Run Build Task
 
-Run (in terminal)
-    ./<compiled file created>
+# Run (in terminal)
+    `./<compiled file created>`
