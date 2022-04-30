@@ -16,6 +16,18 @@ int subtract(T x, int y) {
     return x - y;
 }
 
+// can also use multiple different Types
+template<typename T, typename U>
+// use auto keyword to let compiler decide what type should be returned b/c we are providing it with both an int and a double
+auto max(T x, U y) {
+    return x > y ? x : y;
+}
+
+// c++20 has abbreviated function templates that don't need the template keyword above, just use auto as the types for the parameters
+// auto max(auto x, auto y) {
+//     return x > y ? x : y;
+// }
+
 
 int main() {
 
@@ -28,7 +40,9 @@ int main() {
     int sum3 = add(1,2);
 
     int subtraction = subtract<double>(5.0, 3);
-    std::cout << subtraction << '\n';
+    std::cout << "subtract " << subtraction << '\n';
+
+    std::cout << "max is " << max(2, 3.5) << '\n';
 
     return 0;
 }
