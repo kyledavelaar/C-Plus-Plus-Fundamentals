@@ -30,10 +30,14 @@ int main() {
     // can do the lines above in one step
     int* pointer2{ new int { 7 } };
 
+    //-------------------------------------------------------------------------------------------------------
+
     // when we dynamically allocate memory, we must clean it up ourself
     delete pointer2; // does not actually delete the pointer but just returns the memory location (if don't do next step it will be a 'dangling' pointer)
     pointer2 = nullptr; // now that have memory location, you need to set it to nullptr to 'delete' it
 
+
+    //-------------------------------------------------------------------------------------------------------
 
     // what if memory not available? use std::nothrow as a type of catch
     int* value{ new (std::nothrow) int{} }; // value will be set to nullptr if memory allocation fails
@@ -42,19 +46,37 @@ int main() {
         std::cerr << "not enough memory";
     }
 
+    //-------------------------------------------------------------------------------------------------------
+
     // MEMORY LEAKS
     // happens when program loses the memory address therefore it can't use that address to free it up
     // also happen if pointer holding address of the dynamically allocated memory is assigned to another value
-    int value2 = 5;
-    int* pointer99{ new int{} };
-    pointer99 = &value; // causes memory leak to fix this, add this line above the current line `delete pointer99;`
+    // int value2 = 5;
+    // int* pointer99{ new int{} };
+    // pointer99 = &value; // causes memory leak to fix this, add this line above the current line `delete pointer99;`
 
     // can also get a memory leak by a double allocation
     int* pointer88{ new int{} };
     pointer88 = new int{}; // old address lost
 
+    //-------------------------------------------------------------------------------------------------------
+
+    // Arrays
+    int length{};
+    std::cout << "enter a number";
+    std::cin >> length;
+
+    int* array{ new int[length]{} };
+    std::cout << "array initialized to size of " << length << '\n';
+
+    array[0] = 88;
+
+    delete[] array; // deallocate the memory, don't forget to put delete[] and not just delete!
+    // don't need to set array = nullptr b/c it is going out of scope at the end of the main function anyway
 
 
 
+
+    //-------------------------------------------------------------------------------------------------------
     return 0;
 }

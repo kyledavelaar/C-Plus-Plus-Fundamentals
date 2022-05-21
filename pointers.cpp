@@ -1,25 +1,46 @@
 #include <iostream>
 
+/*
+    Reference
+        - int anotherVariable { 4 };
+        - int& myReferenceToAVariable{ anotherVariable };
+        - often used so copies of variables not created when passing them as args to functions
+    Pointer:
+        - int* myPointer{ &myReferenceToAVariable }
+        - variable that stores the memory address of another variable (it 'points to' another variable)
+    Address Of Operator:
+        - &myReferenceToAVariable
+        - gets the address of a variable
+    Dereference (Indirection) Operator
+        - *myPointer
+        - gets the value that the pointer points at
+    Member Selection Operator
+        - ->
+        - selects a member from a pointer to a struct
+        - combination of an indirection and a normal member accessor (.)
+ */
+
 int main() {
 
     int x{ 5 };
     std::cout << x << '\n';  // print the value of variable x
-    std::cout << &x << '\n'; // print the memory address of variable x (& aka address of operator)
-    // * here is a DEFERENCE OPERATOR (not a pointer)
+    std::cout << &x << '\n'; // Reference: print the memory address of variable x (& aka address of operator)
+    // * here is a DEREFERENCE OPERATOR (not a pointer)
     std::cout << *(&x) << '\n'; // print the value at the memory address of variable x (parentheses not required, but make it easier to read)
 
     // POINTER
     int y { 5 };
+    // create reference to y (an alias). often used when passing values to a function b/c it is less expensive b/c arguments otherwise would be copied
     int& yRef { y };
     // pointers hold addresses (not actual values) so can't do this: int* myPointer { 10 }; instead need to use & which holds a memory address
     int* myPointer { &yRef }; // * here creates a pointer to an integer, and pointer can only be assigned to a memory address, not an actual value, thus the &
-    std::cout << "getting y value from pointer via deference operator: " << *myPointer << '\n';
+    std::cout << "getting y value from pointer via dereference operator: " << *myPointer << '\n';
 
     // can shorten above to
     int z { 10 };
     // pointers and memory address must be same type (int in this case)
     int* pointer2 { &z };
-    std::cout << "getting z value from pointer via deference operator: " << *myPointer << '\n';
+    std::cout << "getting z value from pointer via dereference operator: " << *myPointer << '\n';
 
 
     // change the address of the object the pointer is pointing at
@@ -27,7 +48,7 @@ int main() {
     int* yyPtr{ &yy };
     std::cout << " pointer at yy " << *yyPtr << '\n';
     int xx{ 6 };
-    yyPtr = &xx; // no deference (*) means we are accessing the address held by pointer (here we modify what address the pointer is pointing at)
+    yyPtr = &xx; // no dereference (*) means we are accessing the address held by pointer (here we modify what address the pointer is pointing at)
     std::cout << " pointer now at xx " << *yyPtr << '\n';
 
     // change the value of the object the pointer is pointing at
@@ -36,7 +57,7 @@ int main() {
     int* zzPointer{ &zz };  // pointer to zz
     std::cout << "zz value " << zz << '\n'; // 5
     std::cout << "zz pointer " << *zzPointer << '\n'; // 5
-    *zzPointer = 6; // using deference here (we are accessing the object being pointed at, so we are changing the value of the object being pointed at)
+    *zzPointer = 6; // using dereference here (we are accessing the object being pointed at, so we are changing the value of the object being pointed at)
     std::cout << "zz val now " << zz << '\n';  // 6
     std::cout << "zzRef val now " << zzRef << '\n';  // 6
     std::cout << "zzPointer now " << *zzPointer << '\n'; // 6
