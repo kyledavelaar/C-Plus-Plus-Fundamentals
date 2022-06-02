@@ -19,7 +19,6 @@ class Calculator {
     int privateNumber{88};
 
     public:
-        // Calculator = default; // could use a default constructor if wanted
         using number_type = int;
         std::vector<number_type> history {};
 
@@ -41,6 +40,7 @@ class Credentials {
 
     public:
         // default constructor that will be used in no values provided
+        // Credentials = default; // can also be used if don't need to set any values but want class to be instantiated without arguments passed in
         Credentials() {
             username = "user";
             password = "password";
@@ -73,6 +73,43 @@ class B {
         }
 };
 
+class InitializerExample {
+    private:
+        const int myConst{};
+        int nonConst{};
+        int value{};
+
+    public:
+        // member initializer lists can also be used to set class values, this is especially useful for constant variables that otherwise wouldn't be allowed to be set from the constructor b/c they are const
+        InitializerExample(int v) : value{ v }, myConst{ 8 }
+        {
+            nonConst = 88;
+        }
+
+        void print() {
+            std::cout << "member initializer lists set myConst: " << myConst << ", value: " << value << '\n';
+        }
+};
+
+// sometimes you need to call a constructor from another constructor, or you want to do it so you don't duplicate code inside each constructor
+class Foo {
+    public:
+        int m_value{};
+
+        Foo(int appId) {
+            // code to setupApp
+            std::cout << "setting up app with id: " << appId << '\n';
+        }
+
+        // can't both initialize values `: m_value{99}` and call constructor though, must choose one or the other
+        Foo(const std::string& name) : Foo{88}
+        {
+            // runs 'code to setupApp' and runs code inside this constructor afterward
+            // thus don't need to duplicate 'code to setupApp' in this constructor
+            std::cout << "After set up app with an id we want to give it a name: " << name << '\n';
+        }
+};
+
 int main() {
 
     // can only initialize classes this way b/c all values passed in are public, if have private variables, then need a constructor
@@ -96,6 +133,18 @@ int main() {
     //-----------------------------------------------------------------------
     // classes that have other classes inside of them and constructor ordering
     B aConstructorFinishesBeforeBConstructor{}; // A initialized B initialized
+    //-----------------------------------------------------------------------
+    InitializerExample memberInitializer{99};
+    memberInitializer.print();
+    //-----------------------------------------------------------------------
+    // Foo has two constructors so can pass string argument or int argument here
+    // but what if we need both constructors run no matter what argument passed?
+    // we can have Foo{} be in our member initialization list
+    Foo foo{"instagram"};
+
+
+
+
 
     return 0;
 }
