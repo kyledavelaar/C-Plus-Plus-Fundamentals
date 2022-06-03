@@ -20,12 +20,24 @@ class Calculator {
 
     public:
         using number_type = int;
+        number_type total {0};
         std::vector<number_type> history {};
 
-        number_type add(number_type x, number_type y) {
-            number_type sum = x + y;
-            history.push_back(sum);
-            return sum;
+        // returning class allows us to do function chaining
+        Calculator& add(number_type x) {
+            total += x;
+            history.push_back(total);
+            return *this;
+        }
+
+        Calculator& subtract(number_type x) {
+            total -= x;
+            history.push_back(total);
+            return *this;
+        }
+
+        number_type getTotal() {
+            return total;
         }
 
         void printPrivate() {
@@ -46,10 +58,10 @@ class Credentials {
             password = "password";
         }
         // note: parameters cannot be same name as variables!
-        Credentials(std::string u, std::string p="default password") {
+        Credentials(std::string u, std::string password="default password") {
             username = u;
-            password = p;
-            // password = password; // would not work!
+            // password = password; // does not work b/c names are identical! instead need to do this
+            this->password = password;
         }
 
         void print() {
@@ -110,6 +122,57 @@ class Foo {
         }
 };
 
+/*
+    - class definition can be separated from implementation
+    - want to do this b/c if change header file, all classes that import that header file will need to be recompiled -> bad! But if only change cpp file, then only that file needs to be recompiled even if the header file for that class is used in many other files -> much more efficient
+    - Outside of some open source software (where both .h and .cpp files are provided), most 3rd party libraries provide only header files, along with a precompiled library file. There are several reasons for this: 1) It’s faster to link a precompiled library than to recompile it every time you need it, 2) a single copy of a precompiled library can be shared by many applications, whereas compiled code gets compiled into every executable that uses it (inflating file sizes), and 3) intellectual property reasons (you don’t want people stealing your code).
+*/
+
+// definition typically put in Dog.h header file
+class Dog {
+    private:
+        std::string name {};
+
+    public:
+        Dog(const std::string& name);
+        void bark(const std::string& type) const;
+        // print must be a const method b/c we are accepting a const reference class (and we're passing a const reference class so we're more efficient -> no copy of the class is made)
+        void print(const Dog&) const;
+};
+// implementation typically put in Dog.cpp file
+Dog::Dog(const std::string& name) {
+    this->name = name;
+}
+// we need to add 'const' to the end of this method b/c below we are instantiating the class as a const class (same in declaration bark() method)
+// also const on the method means we can't change any class properties from this method
+void Dog::bark(const std::string& volume) const {
+    std::cout << name << " barking " << volume << '\n';
+}
+void Dog::print(const Dog& dog) const {
+    std::cout << "The dog's name is: " << dog.name << '\n';
+}
+
+class GlobalCounter {
+    private:
+        // using static means changes to this value reflect in all instantiations even if only one instantiation made the change
+        // must use 'inline' b/c static variables can't be assigned a value on this line otherwise, would need to do it later
+        inline static int counter{ 0 };
+
+        // another use for static is something you don't need/want re-created for each class instantiation but want only one copy for performance reasons (large vector that would take a lot of memory to hold a copy in each class instantiation)
+        // a good example of this may be config or a lookup table that never changes but all classes need to read from
+        inline static const std::vector<int> ids {1,2,3,4};
+
+    public:
+        int increase() {
+            return counter++;
+        }
+        int getCount() {
+            return counter;
+        }
+};
+
+
+
 int main() {
 
     // can only initialize classes this way b/c all values passed in are public, if have private variables, then need a constructor
@@ -117,8 +180,8 @@ int main() {
     date.print();
     //-----------------------------------------------------------------------
     Calculator calculator{};
-    calculator.add(4,6);
-    calculator.add(10,12);
+    int total = calculator.add(4).add(10).subtract(1).getTotal();
+    std::cout << "calculator chaining total " << total << '\n';
     for (Calculator::number_type value : calculator.history) {
         std::cout << value << '\n';
     }
@@ -141,10 +204,22 @@ int main() {
     // but what if we need both constructors run no matter what argument passed?
     // we can have Foo{} be in our member initialization list
     Foo foo{"instagram"};
-
-
-
-
+    //-----------------------------------------------------------------------
+    // can make a class instantiation a constant so properties in class cannot be changed
+    const Dog dog{"gruffy"};
+    // can't call bark() unless it is also declared as a const function in the class
+    dog.bark("loudly");
+    // dog.name = "fluffy"; // compiler error
+    Dog dog2{"abraham"};
+    dog.print(dog2);
+    //-----------------------------------------------------------------------
+    GlobalCounter counter{};
+    std::cout << counter.increase() << '\n';
+    std::cout << counter.increase() << '\n';
+    GlobalCounter counter2{};
+    std::cout << counter2.increase() << '\n';
+    std::cout << counter.getCount() << '\n';
+    std::cout << counter2.getCount() << '\n';
 
     return 0;
 }
