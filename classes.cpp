@@ -157,6 +157,7 @@ class GlobalCounter {
         // using static means changes to this value reflect in all instantiations even if only one instantiation made the change
         // must use 'inline' b/c static variables can't be assigned a value on this line otherwise, would need to do it later
         inline static int counter{ 0 };
+        std::string nonStaticMember{ "cannot access from static function" };
 
         // another use for static is something you don't need/want re-created for each class instantiation but want only one copy for performance reasons (large vector that would take a lot of memory to hold a copy in each class instantiation)
         // a good example of this may be config or a lookup table that never changes but all classes need to read from
@@ -164,9 +165,13 @@ class GlobalCounter {
 
     public:
         int increase() {
-            return counter++;
+            // put ++ before counter so updated count gets returned and not existing count
+            return ++counter;
         }
-        int getCount() {
+        // static functions have no this pointer (b/c this refers to the object they belong to and static methods don't belong to an object but a class)
+        // static functions can access other static functions but not non-static functions/variables b/c non-static members belong to an object instance and static ones don't
+        static int getCount() {
+            // std::cout << nonStaticMember << '\n'; // won't compile
             return counter;
         }
 };
@@ -218,8 +223,8 @@ int main() {
     std::cout << counter.increase() << '\n';
     GlobalCounter counter2{};
     std::cout << counter2.increase() << '\n';
-    std::cout << counter.getCount() << '\n';
-    std::cout << counter2.getCount() << '\n';
+    // getCount is static so use the className:: syntax b/c the func belongs to the class and not the instance
+    std::cout << GlobalCounter::getCount() << '\n';
 
     return 0;
 }
