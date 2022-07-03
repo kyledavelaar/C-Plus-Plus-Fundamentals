@@ -176,6 +176,18 @@ class GlobalCounter {
         }
 };
 
+// EXPLICIT keyword tells constructor that it can't do type conversion
+// constructors by default do type conversion for example char and int live in same family so below works unless use explicit keyword
+class NoConversion {
+    public:
+        std::string m_value{};
+        explicit NoConversion(int val) {
+            m_value.resize(val);
+        };
+
+        // can use the delete keyword to not allow a constructor to run with these args
+        NoConversion(char) = delete;
+};
 
 
 int main() {
@@ -225,6 +237,10 @@ int main() {
     std::cout << counter2.increase() << '\n';
     // getCount is static so use the className:: syntax b/c the func belongs to the class and not the instance
     std::cout << GlobalCounter::getCount() << '\n';
+    //-----------------------------------------------------------------------
+
+    // NoConversion noConversion = 'h';
+    // std::cout << "conversion not allowed if use explicit keyword" << noConversion.m_value << '\n';
 
     return 0;
 }

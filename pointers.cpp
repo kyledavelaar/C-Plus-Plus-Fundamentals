@@ -3,10 +3,10 @@
 /*
     Reference
         - int anotherVariable { 4 };
-        - int& myReferenceToAVariable{ anotherVariable };
+        - int& myReferenceToAnotherVariable{ anotherVariable };
         - often used so copies of variables not created when passing them as args to functions
     Pointer:
-        - int* myPointer{ &myReferenceToAVariable }
+        - int* myPointer{ &myReferenceToAnotherVariable }
         - variable that stores the memory address of another variable (it 'points to' another variable)
     Address Of Operator:
         - &myReferenceToAVariable
