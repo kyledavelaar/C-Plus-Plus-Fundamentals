@@ -89,12 +89,6 @@ public:
         return Monster{ type };
     }
 
-    void attackPlayer(Player player) {
-        // reduce player health by monster attack
-        // need to make friend function to have access to reduce player health?
-        // or return amount to reduce player health by?
-    }
-
 private:
     static const Creature& getDefaultCreature(Type type) {
         static const std::array<Creature, static_cast<std::size_t>(Type::max_types)> monsterData {
@@ -137,7 +131,6 @@ std::string runOrFlee() {
     std::string option{};
     std::cout << "Run (r) or Fight (f) ?: ";
     std::cin >> option;
-    // std::cout << "You chose: " << option << '\n';
     while (!(option == "r" || option == "f")) {
         std::cout << "You must choose either r or f." << " Please choose again:" << '\n';
         std::cin.clear();
@@ -145,11 +138,9 @@ std::string runOrFlee() {
     }
     if (option == "f") {
         std::cout << "You chose to Fight" << '\n';
-    }
-    if (option == "r") {
+    } else {
         std::cout << "You chose to Run" << '\n';
     }
-
     return option;
 }
 
@@ -220,17 +211,18 @@ int main() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::rand(); // omit first result
 
-	// Creature o{ "orc", 'o', 4, 2, 10 };
-	// o.addGold(5);
-	// o.reduceHealth(1);
-	// std::cout << "The " << o.getName() << " has " << o.getHealth() << " health and is carrying " << o.getGold() << " gold.\n";
-    // //-------------------------------------------------------------------------
     std::string name{};
     std::cout << "Enter your name: " << '\n';
     std::cin >> name;
     std::cout << "Welcome: " << name << '\n';
     Player player1{name};
-    // std::cout << "You have " << player1.getHealth() << " health and are carrying " << player1.getGold() << " gold." << '\n';
+    startGame(player1);
+
+    // //-------------------------------------------------------------------------
+	// Creature o{ "orc", 'o', 4, 2, 10 };
+	// o.addGold(5);
+	// o.reduceHealth(1);
+	// std::cout << "The " << o.getName() << " has " << o.getHealth() << " health and is carrying " << o.getGold() << " gold.\n";
     // //-------------------------------------------------------------------------
     // Monster m{ Monster::Type::ORC };
 	// std::cout << "A " << m.getName() << " (" << m.getSymbol() << ") was created.\n";
@@ -243,8 +235,13 @@ int main() {
     // }
     // //-------------------------------------------------------------------------
 
-    startGame(player1);
-    /*
+    return 0;
+}
+
+
+
+
+/*
     The player encounters one randomly generated monster at a time.
     For each monster, the player has two choices: (R)un or (F)ight.
     If the player decides to Run, they have a 50% chance of escaping.
@@ -256,51 +253,4 @@ int main() {
     The game ends when the player has died (loss) or reached level 20 (win)
     If the player dies, the game should tell the player what level they were and how much gold they had.
     If the player wins, the game should tell the player they won, and how much gold they had
-    */
-
-    /*
-
-    generateNewMonster = true;
-
-    while(playerAlive && playerLevel < 20) {
-        - if (generateNewMonster) {
-            generate random monster
-        }
-        - ask player to r or f
-        - if (run) {
-            caught = calculate if caught (odd/even random, odd escape, even caught)
-            if (caught) {
-                monsterAttacks()
-                if (player not dead) {
-                    generateNewMonster = false;
-                    continue;  so go back to asking player to r/f
-                } else {
-                    break; which will end main while loop b/c !playerAlive
-                }
-            } else {
-                - increase level
-                - start main while loop again -> continue;
-            }
-        } else {
-            // do we keep fighting until one is dead if choose to fight? or just go one round?
-            while (monsterAlive && playerAlive && playerLevel < 20) {
-                playerAttacks()
-                if (monster not dead) {
-                    monsterAttacks();
-                } else {
-                    player takes monster's gold
-                    player moves up 1 level
-                    continue;
-                }
-            }
-        }
-    }
-    if (playerAlive) {
-        tell player they won and how much gold they have
-    } else {
-        tell player what level they died on and how much gold they have
-    }
-
-    */
-    return 0;
-}
+*/
