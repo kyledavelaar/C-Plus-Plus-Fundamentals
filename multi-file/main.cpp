@@ -7,7 +7,7 @@
 // functions don't need the extern keyword b/c these are function declarations and not definitions
 // int add(int x, int y);
 
-// no header file so need to forward declare
+// no header file so need to forward declare so can get values declared in linkage.cpp
 extern int g_myGlobal;
 extern const int g_myGlobalConst;
 
