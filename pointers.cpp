@@ -4,10 +4,15 @@
     Reference
         - int anotherVariable { 4 };
         - int& myReferenceToAnotherVariable{ anotherVariable };
+        - int &myReferenceToAnotherVariable{ anotherVariable };  // same thing as above
         - often used so copies of variables not created when passing them as args to functions
     Pointer:
+        - a variable which stores the address of another variable
         - int* myPointer{ &myReferenceToAnotherVariable }
         - variable that stores the memory address of another variable (it 'points to' another variable)
+        - star can be after type or before variable (both valid and only a style preference)
+            - int* myPointer = &myRef;
+            - int *myPointer = &myRef;
     Address Of Operator:
         - &myReferenceToAVariable
         - gets the address of a variable
@@ -32,6 +37,7 @@ int main() {
     int y { 5 };
     // create reference to y (an alias). often used when passing values to a function b/c it is less expensive b/c arguments otherwise would be copied
     int& yRef { y };
+    int &yRef2{ y }; // same thing as above, can put & after type or before variableName
     // pointers hold addresses (not actual values) so can't do this: int* myPointer { 10 }; instead need to use & which holds a memory address
     int* myPointer { &yRef }; // * here creates a pointer to an integer, and pointer can only be assigned to a memory address, not an actual value, thus the &
     std::cout << "getting y value from pointer via dereference operator: " << *myPointer << '\n';
